@@ -1,0 +1,142 @@
+@startuml
+title 数学建模论文评审与优化服务平台——业务对象类图
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+
+abstract class User {
+  - userId: String
+  - name: String
+  - contact: String
+  + login(): Boolean
+  + viewReview(): ReviewJob
+}
+
+class Student {
+  + uploadPaper(): PaperAsset
+  + submitRevision(): PaperAsset
+}
+
+class Teacher {
+  + publishRubric(): RubricProfile
+  + reviewRecommendation(): Recommendation
+}
+
+class Operator {
+  + monitorJobs(): List<ReviewJob>
+  + audit(): List<ReviewReport>
+}
+
+class Team {
+  - teamId: String
+  - teamName: String
+  - projectName: String
+  + addMember(user: User): void
+  + grantAccess(asset: PaperAsset): void
+}
+
+class PaperAsset {
+  - assetId: String
+  - title: String
+  - fileType: String
+  - sha256: String
+  - version: String
+  - parseStatus: String
+  + validate(): Boolean
+  + parse(): List<EvidenceBlock>
+}
+
+class EvidenceBlock {
+  - blockId: String
+  - text: String
+  - page: Integer
+  - paragraph: Integer
+  - lineStart: Integer
+  - lineEnd: Integer
+  - quoteHash: String
+  + locate(): String
+}
+
+class RubricProfile {
+  - rubricId: String
+  - name: String
+  - version: String
+  - weights: Map
+  - published: Boolean
+  + validateWeights(): Boolean
+  + publish(): void
+}
+
+class ReviewJob {
+  - reviewId: String
+  - status: String
+  - serviceType: String
+  - inputHash: String
+  - createdAt: DateTime
+  + freezeInputs(): void
+  + runStage(stageId: String): StageResult
+  + retry(): void
+}
+
+class StageResult {
+  - stageId: String
+  - score: Decimal
+  - rationale: String
+  - evidenceIds: List
+  - stale: Boolean
+  + validateEvidence(): Boolean
+  + markStale(): void
+}
+
+class Finding {
+  - findingId: String
+  - title: String
+  - severity: String
+  - verdict: String
+  - evidenceIds: List
+  - resolvedStatus: String
+  + locateEvidence(): List<EvidenceBlock>
+  + updateStatus(): void
+}
+
+class Recommendation {
+  - recommendationId: String
+  - action: String
+  - acceptance: String
+  - priority: String
+  - owner: String
+  + edit(): void
+  + checkAcceptance(): Boolean
+}
+
+class ReviewReport {
+  - reportId: String
+  - format: String
+  - generatedAt: DateTime
+  - reportVersion: String
+  + generate(): void
+  + export(format: String): File
+}
+
+User <|-- Student
+User <|-- Teacher
+User <|-- Operator
+Team "1" o-- "1..*" User : members
+Team "1" -- "0..*" PaperAsset : authorizes
+PaperAsset "1" *-- "0..*" EvidenceBlock : contains
+ReviewJob "0..*" --> "1" PaperAsset : reviews
+ReviewJob "0..*" --> "1" RubricProfile : uses version
+ReviewJob "1" *-- "0..7" StageResult : produces
+ReviewJob "1" *-- "0..*" Finding : records
+ReviewJob "1" *-- "0..*" Recommendation : tracks
+Finding "0..*" --> "0..*" EvidenceBlock : cites
+Recommendation "0..*" --> "1" Finding : addresses
+ReviewReport "0..*" --> "1" ReviewJob : summarizes
+User "1" -- "0..*" ReviewJob : creates
+User "1" -- "0..*" ReviewReport : views
+
+note right of ReviewJob
+阶段顺序：问题识别、问题表述、假设、
+模型构造、求解、代码实现、结果分析
+end note
+@enduml

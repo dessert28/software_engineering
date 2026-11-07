@@ -18,3 +18,30 @@ manual_extracted.txt
 .DS_Store
 Thumbs.db
 ~$*
+
+# ── 归档区：留在磁盘，不进版本控制 ──────────────────────────
+# 旧方向产品源码（内含独立 .git，体积含 .venv/build/dist）
+archive/legacy-paper-review/product-source/
+# 旧方向产品整理副本
+archive/legacy-paper-review/product-package/
+# 452MB 数模分析脚本包（含 .venv）
+archive/legacy-paper-review/mathematical-modeling.zip
+# 原始压缩包（内容已解压到别处）
+archive/packages/
+# 权限诊断报告
+archive/_acl-recovery/
+
+# ── 大体积课程资料 ────────────────────────────────────────
+# 95MB 参考创业计划书，仅本地查阅
+软件工程实验资料/【参考】无人机培训平台_创业计划书.docx
+
+# ── 整理过程产物 ──────────────────────────────────────────
+_baseline_before.csv
+
+# ── 报告排版自查截图 ───────────────────────────────────────
+# 逐页 PNG 仅为复现排版问题，体积大且可再生
+competition-management/experiments/*/qa/pages/
+
+# ── 构建/渲染产物 ─────────────────────────────────────────
+*.egg-info/
+.pnpm-store/

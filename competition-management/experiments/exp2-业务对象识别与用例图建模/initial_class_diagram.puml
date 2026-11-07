@@ -1,0 +1,205 @@
+@startuml
+title 数学建模比赛管理系统——业务对象类图
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+
+abstract class User {
+  - userId: String
+  - name: String
+  - role: String
+  - contact: String
+  + login(): Boolean
+}
+
+class Admin {
+  + createCompetition(): Competition
+  + assignReviewTask(): ReviewTask
+  + publishResult(): CompetitionResult
+}
+
+class Expert {
+  + submitScore(): ScoreRecord
+}
+
+class Advisor {
+  + viewTeam(): Team
+}
+
+class Leader {
+  + registerTeam(): Team
+  + submitVersion(): SubmissionVersion
+}
+
+class Member {
+  + viewTeam(): Team
+}
+
+class Competition {
+  - competitionId: String
+  - name: String
+  - edition: String
+  - organization: String
+  - lifecycle: String
+  - dateRange: DateRange
+  + publish(): void
+  + archive(): ArchiveRecord
+}
+
+class RuleProfile {
+  - ruleId: String
+  - version: String
+  - deadlines: Map
+  - published: Boolean
+  + validateTimeline(): Boolean
+  + publish(): void
+}
+
+class Announcement {
+  - announcementId: String
+  - title: String
+  - content: String
+  - scope: String
+  - status: String
+  + withdraw(): void
+}
+
+class ProblemSet {
+  - problemId: String
+  - text: String
+  - attachments: List
+  - version: String
+  + bindCompetition(): void
+}
+
+class Team {
+  - teamId: String
+  - teamName: String
+  - members: List
+  - advisor: String
+  + addMember(user: User): void
+}
+
+class Enrollment {
+  - enrollmentId: String
+  - status: String
+  - reviewComment: String
+  + review(): void
+}
+
+class SubmissionAsset {
+  - submissionId: String
+  - fileType: String
+  - sha256: String
+  - versions: List
+  + validateFile(): Boolean
+}
+
+class SubmissionVersion {
+  - versionId: String
+  - version: String
+  - locked: Boolean
+  - submittedAt: DateTime
+  + lock(): void
+  + withdraw(): void
+}
+
+class ReviewTask {
+  - taskId: String
+  - status: String
+  - dueAt: DateTime
+  + assign(): void
+  + replace(): void
+}
+
+class RubricProfile {
+  - rubricId: String
+  - name: String
+  - version: String
+  - weights: Map
+  - published: Boolean
+  + calcTotal(): Decimal
+}
+
+class ScoreRecord {
+  - scoreId: String
+  - score: Decimal
+  - comment: String
+  + validate(): Boolean
+}
+
+class CompetitionResult {
+  - resultId: String
+  - scores: List
+  - awards: List
+  + publish(): void
+}
+
+class Appeal {
+  - appealId: String
+  - content: String
+  - evidence: List
+  - status: String
+  + resolve(): void
+}
+
+class AuditLog {
+  - logId: String
+  - object: String
+  - beforeValue: String
+  - afterValue: String
+  - operator: String
+  - time: DateTime
+  + record(): void
+}
+
+class ArchiveRecord {
+  - archiveId: String
+  - files: List
+  - format: String
+  - readOnly: Boolean
+  + export(): void
+}
+
+class CollaborationNote {
+  - noteId: String
+  - content: String
+  - author: String
+  - createdAt: DateTime
+  + add(): void
+}
+
+User <|-- Admin
+User <|-- Expert
+User <|-- Advisor
+User <|-- Leader
+User <|-- Member
+Team "1" o-- "1..*" User : members
+Team "1" -- "1" Leader : leads
+Team "0..*" --> "1" Competition : applies
+Team "1" -- "0..1" Advisor : advised
+Competition "1" *-- "1..*" RuleProfile : versions
+Competition "1" *-- "0..*" Announcement : posts
+Competition "1" *-- "0..*" ProblemSet : publishes
+Team "1" -- "0..1" Enrollment : requests
+Team "1" *-- "0..1" SubmissionAsset : owns
+SubmissionAsset "1" *-- "0..*" SubmissionVersion : versions
+ReviewTask "0..*" --> "1" SubmissionVersion : reviews
+ReviewTask "0..*" --> "1" RubricProfile : uses
+ReviewTask "0..*" --> "1" Expert : assigned
+ReviewTask "1" *-- "0..1" ScoreRecord : produces
+CompetitionResult "1" -- "0..*" ScoreRecord : aggregates
+CompetitionResult "0..*" --> "1" Competition : for
+Appeal "0..*" --> "1" CompetitionResult : challenges
+AuditLog "0..*" --> "1" Competition : tracks
+ArchiveRecord "0..*" --> "1" Competition : archives
+CollaborationNote "0..*" --> "1" Team : belongs
+User "1" -- "0..*" AuditLog : operates
+User "1" -- "0..*" Appeal : files
+
+note right of Competition
+赛事生命周期：草稿→报名开放→报名截止→
+资格审核→材料提交→提交截止→评审中→
+结果发布→申诉/复核→已归档
+end note
+@enduml

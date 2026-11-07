@@ -1,0 +1,85 @@
+@startuml
+title 数学建模比赛管理系统——用例图
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam actorStyle awesome
+
+actor 用户 as User
+actor 赛事管理员 as Admin
+actor 评审专家 as Expert
+actor 指导教师 as Advisor
+actor 队长 as Leader
+actor 队员 as Member
+
+User <|-- Admin
+User <|-- Expert
+User <|-- Advisor
+User <|-- Leader
+User <|-- Member
+
+rectangle "数学建模比赛管理系统" {
+  usecase "创建与发布赛事" as UC1
+  usecase "配置规则与时间节点" as UC1a
+  usecase "发布题目与公告" as UC1b
+  usecase "注册队伍与维护成员" as UC2
+  usecase "审核报名资格" as UC3
+  usecase "上传与管理论文版本" as UC4
+  usecase "提交/撤回/重新提交" as UC4a
+  usecase "截止锁定" as UC4b
+  usecase "分配评审任务与回避" as UC5
+  usecase "查看回避关系" as UC5a
+  usecase "匿名评审与评分提交" as UC6
+  usecase "校验评分与必填项" as UC6a
+  usecase "监控评审进度与异常处理" as UC7
+  usecase "成绩汇总与结果发布" as UC8
+  usecase "提交申诉" as UC9
+  usecase "处理申诉与复核" as UC9a
+  usecase "查询审计日志" as UC10
+  usecase "导出与赛事归档" as UC11
+  usecase "团队协作记录" as UC12
+  usecase "报名截止处理" as EX1
+  usecase "文件校验失败提示" as EX2
+  usecase "专家拒评/逾期处理" as EX3
+  usecase "成绩计算错误暂停发布" as EX4
+}
+
+Admin --> UC1
+Admin --> UC3
+Admin --> UC5
+Admin --> UC7
+Admin --> UC8
+Admin --> UC9a
+Admin --> UC10
+Admin --> UC11
+Expert --> UC6
+Expert --> UC7
+Advisor --> UC2
+Advisor --> UC12
+Leader --> UC2
+Leader --> UC4
+Leader --> UC9
+Leader --> UC12
+Member --> UC2
+Member --> UC4
+Member --> UC12
+
+UC1 .> UC1a : <<include>>
+UC1 .> UC1b : <<include>>
+UC4 .> UC4a : <<include>>
+UC4 .> UC4b : <<include>>
+UC5 .> UC5a : <<include>>
+UC6 .> UC6a : <<include>>
+UC9 .> UC9a : <<extend>>
+EX1 .> UC2 : <<extend>>
+EX1 .> UC4 : <<extend>>
+EX2 .> UC4 : <<extend>>
+EX3 .> UC5 : <<extend>>
+EX3 .> UC7 : <<extend>>
+EX4 .> UC8 : <<extend>>
+
+note right of UC8
+赛事生命周期：草稿→报名开放→资格审核→
+材料提交→评审中→结果发布→已归档
+end note
+@enduml
