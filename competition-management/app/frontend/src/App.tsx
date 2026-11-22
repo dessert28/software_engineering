@@ -14,6 +14,7 @@ import LoginPage from './pages/LoginPage'
 import MyTeamPage from './pages/MyTeamPage'
 import NotificationsPage from './pages/NotificationsPage'
 import ResultsPage from './pages/ResultsPage'
+import RegisterPage from './pages/RegisterPage'
 import ReviewOpsPage from './pages/ReviewOpsPage'
 import StatisticsPage from './pages/StatisticsPage'
 
@@ -27,6 +28,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
       <Route
         path="/"
         element={

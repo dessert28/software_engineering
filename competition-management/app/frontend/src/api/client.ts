@@ -463,6 +463,18 @@ export const api = {
       body: JSON.stringify({ email, password }),
     }),
 
+  register: (body: {
+    email: string
+    password: string
+    name: string
+    school?: string
+    role?: 'CAPTAIN' | 'MEMBER'
+  }) =>
+    request<{ access_token: string; user: User }>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
+
   me: () => request<User>('/auth/me'),
 
   competitions: () => request<Competition[]>('/competitions'),

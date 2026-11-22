@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
@@ -25,6 +25,30 @@ class ORMModel(BaseModel):
 class LoginRequest(BaseModel):
     email: str = Field(min_length=3, max_length=255)
     password: str = Field(min_length=6, max_length=128)
+
+
+class RegisterRequest(BaseModel):
+    """学生自助注册：只允许 CAPTAIN / MEMBER，特权角色由管理员创建。"""
+
+    email: str = Field(min_length=5, max_length=255)
+    password: str = Field(min_length=8, max_length=128)
+    name: str = Field(min_length=2, max_length=120)
+    school: str | None = Field(default=None, max_length=200)
+    role: Literal["CAPTAIN", "MEMBER"] = "CAPTAIN"
+
+    @field_validator("email")
+    @classmethod
+    def _email_shape(cls, v: str) -> str:
+        email = v.strip().lower()
+        local, sep, domain = email.partition("@")
+        if not sep or not local or "." not in domain or domain.startswith(".") or domain.endswith("."):
+            raise ValueError("邮箱格式不正确")
+        return email
+
+    @field_validator("name")
+    @classmethod
+    def _name(cls, v: str) -> str:
+        return v.strip()
 
 
 class UserOut(ORMModel):

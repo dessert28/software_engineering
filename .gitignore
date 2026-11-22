@@ -59,3 +59,4 @@ pip-unpack-*/
 mmcm-test-*/
 ai-engine-check-*/
 coldstart_*.db
+pytest-of-*/

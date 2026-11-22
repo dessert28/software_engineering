@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { LockOutlined, MailOutlined } from '@ant-design/icons'
 import { App, Button, Card, Form, Input, Space, Typography } from 'antd'
 
@@ -85,6 +85,13 @@ export default function LoginPage() {
               </Button>
             ))}
           </Space>
+        </div>
+
+        <div style={{ marginTop: 14, textAlign: 'center' }}>
+          <Typography.Text type="secondary">还没有账号？</Typography.Text>
+          <Link to="/register" style={{ marginLeft: 4 }}>
+            学生注册
+          </Link>
         </div>
       </Card>
     </div>

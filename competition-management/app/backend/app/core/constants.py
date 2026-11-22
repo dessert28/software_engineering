@@ -114,6 +114,7 @@ class AuditAction(StrEnum):
     # AI 预评级与确定性分流（tech-stack-python §10，功能需求表无独立 FR 编号）
     AI_ASSESS = "AI_ASSESS"
     ESCALATE = "ESCALATE"
+    REGISTER = "REGISTER"
 
 
 # ─────────────── P1/P2 新增状态枚举 ───────────────

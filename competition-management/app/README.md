@@ -79,6 +79,8 @@ uvicorn app.main:app --reload --port 8000
 | `teacher@example.edu` | 指导教师 |
 | `judge@example.edu` | 评审专家 |
 
+**学生自助注册**：登录页点「学生注册」（或访问 `/register`），填写姓名、邮箱、学校，选择「队长 / 队员」身份即可注册并自动登录。队长可建队、报名、提交作品和提交申诉；队员由队长邀请入队。管理员、指导教师、评审专家不开放自助注册，仍由平台管理员创建。
+
 ### 前端
 
 ```powershell
