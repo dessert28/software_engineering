@@ -45,3 +45,17 @@ competition-management/experiments/*/qa/pages/
 # ── 构建/渲染产物 ─────────────────────────────────────────
 *.egg-info/
 .pnpm-store/
+
+# ── pip 安装残留（本机临时目录） ───────────────────────────
+pip-build-tracker-*/
+pip-ephem-wheel-cache-*/
+pip-install-*/
+pip-unpack-*/
+
+# ── WorkBuddy 会话数据（工作日志等，不属于项目交付物） ──────
+.workbuddy/
+
+# ── pytest / 自检产生的临时目录（内含数据库与上传文件） ─────
+mmcm-test-*/
+ai-engine-check-*/
+coldstart_*.db

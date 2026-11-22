@@ -1,0 +1,12 @@
+# 构建产物与运行数据
+.venv/
+__pycache__/
+*.egg-info/
+node_modules/
+dist/
+data/
+*.db
+*.db-wal
+*.db-shm
+.pytest_cache/
+.ruff_cache/
